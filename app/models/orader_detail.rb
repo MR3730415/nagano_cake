@@ -1,0 +1,2 @@
+class OraderDetail < ApplicationRecord
+end
