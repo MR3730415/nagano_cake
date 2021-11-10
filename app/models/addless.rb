@@ -1,0 +1,2 @@
+class Addless < ApplicationRecord
+end
