@@ -1,59 +1,44 @@
 Rails.application.routes.draw do
-  namespace :public do
-    get 'addresses/index'
-    get 'addresses/edit'
+  
+  scope module: 'public' do
+    root to: 'homes#top'
+    get  "/home/about" => "homes#about"
+    resource :items, only: [:show, :index]
   end
-  namespace :public do
-    get 'orders/new'
-    get 'orders/complete'
-    get 'orders/index'
-    get 'orders/show'
+  
+  scope mobule: :public do
+    resource :genres, only: [:show]
+    resource :customer, only: [:update, :edit, :show]
+    get 'unsubscribe' => 'customers#unsubscribe'
+    patch 'withdraw' => 'customers#withdraw', as: 'customers_withdraw'
+    resource :cart_items, only: [:index, :create, :update, :destroy]
+    delete 'cart_items' => 'cart_items#all_destroy', as: 'all_destroy'
+    get 'orders/about' => 'orders#about', as: 'orders_about'
+    get 'orders/thanks' => 'orders#thanks'
+    resource :orders, only: [:new, :create, :index, :show]
+    resource :addresses, oly: [:index, :edit, :create, :destoroy, :update]
   end
-  namespace :public do
-    get 'cart_items/index'
-  end
-  namespace :public do
-    get 'customers/show'
-    get 'customers/edit'
-    get 'customers/unsubscribe'
-  end
-  namespace :public do
-    get 'items/index'
-    get 'items/show'
-  end
-  namespace :public do
-    get 'homes/top'
-    get 'homes/about'
-  end
+  
   namespace :admin do
-    get 'orders/show'
-    get 'orders/update'
+    root to: 'homes#top'
+    resource :customers, only[:index, :edit, :update, :shpw]
+    resource :genres, only[:index, :create, :edit, :update]
+    resource :items, only[:index, :new, :create, :show, :edit, :update]
+    resource :orders, only[:show, :update, :index]
+    resource :order_details, onry[:update]
   end
-  namespace :admin do
-    get 'customers/index'
-    get 'customers/show'
-    get 'customers/edit'
-    get 'customers/update'
-  end
-  namespace :admin do
-    get 'genres/index'
-    get 'genres/ex'
-    get 'genres/create'
-    get 'genres/edit'
-    get 'genres/update'
-  end
-  namespace :admin do
-    get 'items/index'
-    get 'items/new'
-    get 'items/create'
-    get 'items/show'
-    get 'items/edit'
-    get 'items/update'
-  end
-  namespace :admin do
-    get 'homes/top'
-  end
-  devise_for :admins
-  devise_for :customers
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  #会員側
+  devise_for :customers, controller:{
+    sessions:   'public/sessions',
+    password:   'public/password',
+    registrations: 'public/registrations'
+  }
+  
+  #管理者側
+  devise_for :admins, controller:{
+    sessions:   'admin/sessions',
+    password:   'admin/password',
+    registrations: 'admin/registrations'
+  }
+  
 end
