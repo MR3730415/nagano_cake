@@ -1,7 +1,35 @@
 class Admin::OrdersController < ApplicationController
-  def show
-  end
+  before_action :authenticate_admin!
 
-  def update
-  end
+	def index
+		#@search = Order.ransack(params[:q])
+    #@orders = @search.result.page(params[:page]).per(10)
+    @orders = Order.all
+	end
+
+	def show
+		@order = Order.find(params[:id])
+		@order_details = @order.order_details
+	end
+
+	def total(total_payment
+
+	end
+
+	def update
+		order = Order.find(params[:id])
+		order_details = order.order_details
+    order.update(order_params)
+
+		if order.order_status == "入金確認"
+			order_details.update_all(making_status: "製作待ち")
+		end
+		redirect_to admin_order_path(order.id)
+	end
+
+  private
+	def order_params
+		params.require(:order).permit(:order_status, :customer_id)
+	end
+
 end
