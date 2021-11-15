@@ -1,44 +1,46 @@
 Rails.application.routes.draw do
-  
+
   scope module: 'public' do
     root to: 'homes#top'
-    get  "/home/about" => "homes#about"
-    resource :items, only: [:show, :index]
+    get "/home/about" => "homes#about"
+    resources :items, only: [:show, :index]
   end
-  
-  scope mobule: :public do
-    resource :genres, only: [:show]
-    resource :customer, only: [:update, :edit, :show]
+
+  scope module: :public do
+    resources :genres, only: [:show]
+    resource :customers, only: [:update, :edit, :show]
     get 'unsubscribe' => 'customers#unsubscribe'
     patch 'withdraw' => 'customers#withdraw', as: 'customers_withdraw'
-    resource :cart_items, only: [:index, :create, :update, :destroy]
+    resources :cart_items, only: [:index, :create, :update, :destroy]
     delete 'cart_items' => 'cart_items#all_destroy', as: 'all_destroy'
     get 'orders/about' => 'orders#about', as: 'orders_about'
     get 'orders/thanks' => 'orders#thanks'
-    resource :orders, only: [:new, :create, :index, :show]
-    resource :addresses, oly: [:index, :edit, :create, :destoroy, :update]
+    resources :orders, only: [:create, :new, :index, :show]
+    resources :addresses, only: [:index, :create, :destroy, :edit, :update]
   end
-  
-  namespace :admin do
-    root to: 'homes#top'
-    resource :customers, only[:index, :edit, :update, :shpw]
-    resource :genres, only[:index, :create, :edit, :update]
-    resource :items, only[:index, :new, :create, :show, :edit, :update]
-    resource :orders, only[:show, :update, :index]
-    resource :order_details, onry[:update]
-  end
-  #会員側
-  devise_for :customers, controller:{
-    sessions:   'public/sessions',
-    password:   'public/password',
+
+  #会員側のルート
+  devise_for :customers, controllers: {
+    sessions:      'public/sessions',
+    passwords:     'public/passwords',
     registrations: 'public/registrations'
   }
-  
-  #管理者側
-  devise_for :admins, controller:{
-    sessions:   'admin/sessions',
-    password:   'admin/password',
-    registrations: 'admin/registrations'
+
+  #管理者側のルート
+  devise_for :admins, controllers: {
+   sessions:      'admin/sessions',
+   passwords:     'admin/passwords',
+   registrations: 'admin/registrations'
   }
-  
+
+  namespace :admin do
+    root to: 'homes#top'
+    resources :customers, only: [:index, :edit, :update, :show]
+    resources :genres, only: [:index, :create, :edit, :update]
+    resources :items, only: [:show, :index, :new, :create, :edit, :update]
+    resources :orders, only: [:index, :show, :update]
+    resources :order_details, only: [:update]
+  end
+
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
