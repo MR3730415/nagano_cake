@@ -8,6 +8,55 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
+  
+  <header>
+    <% if admin_signed_in? %>
+    <li>
+      <%= link_to 'ジャンル一覧', admin_genres_path %>
+    </li>
+    
+    <li>
+     <%= link_to '商品一覧', admin_items_path %> 
+    </li>
+    
+    <li>
+      <%= link_to '会員一覧', admin_customer_path %>
+    </li>
+    
+    <li>
+      <%= link_to '注文履歴一覧', admin_orders_path %>
+    </li>
+    
+    <li>
+      <%= link_to 'ログアウト', destoroy_admin_session_path, method: :delete %>
+    </li>
+    
+  <% elseif customer_signed_in? %>
+    <li>
+      <%= link_to 'マイページ', customer_path %>
+    </li>
+    
+    <li>
+      <%= link_to '商品一覧', customer_path %>
+    </li>
+    
+    <li>
+      <%= link_to 'カート画面', cart_items_path %>
+    </li>
+    
+    <li>
+      <%= link_to 'ログアウト', destoroy_customer_session_path, method: :delete %>
+    </li>
+
+  <% else %>
+    <li>
+      <%= link_to '会員登録', new_customer_registration_path %>
+    </li>
+    
+    <li>
+      <%= link_to 'ログイン', new_customer_session_path %>
+    </li>
+  </header>
 
   <body>
     <%= yield %>
