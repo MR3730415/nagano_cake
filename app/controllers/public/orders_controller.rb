@@ -40,7 +40,7 @@ class Public::OrdersController < ApplicationController
     redirect_to complete_orders_path
   end
 
-  def complete
+  def thanks
   end
 
   def index
