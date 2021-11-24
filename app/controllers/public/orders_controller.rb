@@ -40,7 +40,7 @@ class Public::OrdersController < ApplicationController
     redirect_to complete_orders_path
   end
 
-  def thanks
+  def complete
   end
 
   def index
@@ -59,6 +59,5 @@ class Public::OrdersController < ApplicationController
   def order_params
     params.require(:order).permit(:customer_id, :name, :postal_code, :address, :shipping_cost, :total_payment, :payment_method)
   end
-
 
 end
