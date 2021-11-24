@@ -1,5 +1,5 @@
 class OrderDetail < ApplicationRecord
-    belongs_to :item
+  belongs_to :item
   belongs_to :order
 
   def with_tax_price
@@ -11,4 +11,5 @@ class OrderDetail < ApplicationRecord
   end
 
   enum making: { impossible: 0, wait: 1, production: 2, completion: 3}
+  
 end
